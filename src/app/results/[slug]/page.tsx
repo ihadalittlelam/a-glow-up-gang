@@ -39,19 +39,29 @@ export default async function ResultPage({
 
       <section className="mb-10">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-400 mb-3">
-          Your palette (placeholder — not your final recommended colors yet)
+          Your recommended palette
         </h2>
-        <div className="flex gap-3">
-          {season.placeholderPalette.map((hex) => (
-            <div key={hex} className="flex flex-col items-center gap-1">
+        {season.needsReview && (
+          <p className="mb-3 text-xs font-medium text-amber-600 bg-amber-50 border border-amber-200 rounded-md px-3 py-2 inline-block">
+            Still being refined — this palette has weaker source grounding than the others and hasn&apos;t had a colorist review pass yet.
+          </p>
+        )}
+        <div className="flex flex-wrap gap-3">
+          {season.recommendedPalette.map((color) => (
+            <div key={color.hex} className="flex flex-col items-center gap-1 w-16">
               <div
                 className="h-14 w-14 rounded-full border border-black/5 shadow-sm"
-                style={{ backgroundColor: hex }}
+                style={{ backgroundColor: color.hex }}
+                title={color.estimated ? `${color.name} (estimated hex)` : color.name}
               />
-              <span className="text-xs text-neutral-400">{hex}</span>
+              <span className="text-[11px] text-neutral-500 text-center leading-tight">
+                {color.name}
+                {color.estimated && <span className="text-neutral-300">*</span>}
+              </span>
             </div>
           ))}
         </div>
+        <p className="mt-4 text-sm text-neutral-600">{season.styleNote}</p>
       </section>
 
       <section className="mb-10 rounded-xl border border-neutral-200 bg-white p-6">
