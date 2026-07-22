@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getSeasonBySlug, FAMILY_META, SEASONS } from "@/data/seasons";
+import { generateNarrative } from "@/lib/narrative";
 
 export function generateStaticParams() {
   return SEASONS.map((s) => ({ slug: s.slug }));
@@ -16,6 +17,7 @@ export default async function ResultPage({
   if (!season) notFound();
 
   const family = FAMILY_META[season.family];
+  const narrative = await generateNarrative(season);
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
@@ -92,15 +94,12 @@ export default async function ResultPage({
         </dl>
       </section>
 
-      <section className="mb-10 rounded-xl border border-dashed border-neutral-300 p-6">
+      <section className="mb-10 rounded-xl border border-neutral-200 bg-white p-6">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-400 mb-2">
-          Personalized notes — placeholder
+          Personalized notes
         </h2>
-        <p className="text-neutral-600 text-sm leading-relaxed">
-          This is where the LLM-written narrative will go once wired up: a
-          few warm sentences explaining why {season.name.toLowerCase()} colors
-          work for this profile, plus 2–3 styling tips. Not generated yet —
-          this text is a stand-in so the layout is complete.
+        <p className="text-neutral-700 text-sm leading-relaxed whitespace-pre-line">
+          {narrative}
         </p>
       </section>
 
