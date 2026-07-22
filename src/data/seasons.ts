@@ -1,11 +1,24 @@
 // 16-season PCCS-mapped color analysis taxonomy.
-// This is the DIAGNOSTIC layer (how to recognize each season from a person's
-// features) that Jess supplied. The `placeholderPalette` hex arrays below are
-// NOT the real recommended-color output yet — they're visually distinct
-// stand-ins so the results page renders something coherent. Swap these for
-// the actual "colors this person should wear" palette per season later.
+//
+// Diagnostic fields (keywords, pccsLocation, blueprint) describe how to
+// RECOGNIZE each season from a person's features — Jess supplied this layer.
+//
+// `recommendedPalette` is the OUTPUT layer: real colors a person of that
+// season should wear, compiled from published seasonal-color-analysis
+// sources (see the project doc `16-season-output-palettes.md` for full
+// citations). Colors marked `estimated: true` had no published hex in any
+// source found — a named color was matched to a reasonable hex instead.
+// Seasons marked `needsReview: true` (Vivid Spring, Bright Summer, Strong
+// Autumn) are the three with the weakest source grounding — worth a manual
+// pass by an actual colorist before treating them as final.
 
 export type SeasonFamily = "Spring" | "Summer" | "Autumn" | "Winter";
+
+export interface PaletteColor {
+  name: string;
+  hex: string;
+  estimated?: boolean;
+}
 
 export interface SeasonProfile {
   slug: string;
@@ -19,7 +32,9 @@ export interface SeasonProfile {
     eyeColor: string;
     eyeExpression: string;
   };
-  placeholderPalette: string[];
+  recommendedPalette: PaletteColor[];
+  styleNote: string;
+  needsReview?: boolean;
 }
 
 export const FAMILY_META: Record<
@@ -47,7 +62,20 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Light clear blue, pale green, or soft hazel.",
       eyeExpression: "A glass-like, innocent, and highly reflective sparkle.",
     },
-    placeholderPalette: ["#FFD9C7", "#FFF3B0", "#B7E4C7", "#FFB6A3", "#F7E1D7"],
+    recommendedPalette: [
+      { name: "Warm Ivory", hex: "#FFF1D6" },
+      { name: "Peach", hex: "#F6B38A" },
+      { name: "Light Coral", hex: "#FF8F7A" },
+      { name: "Warm Pink", hex: "#F7A6B8" },
+      { name: "Butter Yellow", hex: "#F7D86A" },
+      { name: "Fresh Mint", hex: "#9FD8B5" },
+      { name: "Light Aqua", hex: "#68C7C1" },
+      { name: "Clear Sky Blue", hex: "#67BDE0" },
+      { name: "Golden Camel", hex: "#C99A5B" },
+      { name: "Soft Grass Green", hex: "#B7C98F", estimated: true },
+    ],
+    styleNote:
+      "Combine several soft-bright hues rather than going neutrals-only or monochrome; avoid black/white, deep jewel tones, and neon. Favor light gold or rose-gold metals.",
   },
   {
     slug: "bright-spring",
@@ -62,7 +90,20 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Vivid teal green, bright sparkling topaz, or clear warm hazel.",
       eyeExpression: "Twinkling, animated, and highly refractive; the eyes act as a focal point.",
     },
-    placeholderPalette: ["#FF6F61", "#FFD23F", "#06D6A0", "#FF9F1C", "#4CC9F0"],
+    recommendedPalette: [
+      { name: "Clear Ivory", hex: "#FFF7E8" },
+      { name: "Hot Coral", hex: "#FF5A5F" },
+      { name: "Watermelon", hex: "#FF4F7B" },
+      { name: "Poppy Red", hex: "#F53B2F" },
+      { name: "Acid Yellow", hex: "#F4E04D" },
+      { name: "Lime", hex: "#A7D129" },
+      { name: "Clear Emerald", hex: "#00A676" },
+      { name: "Bright Turquoise", hex: "#00B8C8" },
+      { name: "Clear Warm Blue", hex: "#4FA3E3" },
+      { name: "Warm Fuchsia", hex: "#CC5FA3" },
+    ],
+    styleNote:
+      "Sits between Spring and Winter and can handle sharper contrast than other Spring seasons — pair bold accents with crisp warm neutrals, never dusty or ashy tones.",
   },
   {
     slug: "vivid-spring",
@@ -70,14 +111,28 @@ export const SEASONS: SeasonProfile[] = [
     family: "Spring",
     keywords: ["Striking", "High-Chroma", "Electric", "Playful", "High-Contrast"],
     pccsLocation:
-      "Anchored in Vivid (v) and Strong (str) rings. Maximum saturation, medium value, warm-neutral hue.",
+      "Vivid (v) and Strong (str) rings. Maximum saturation, medium value, warm-neutral hue.",
     blueprint: {
       skin: "Radiant golden-beige, clear bronze, or glowing dark warm skin with high clarity.",
       hair: "Medium to deep golden chestnut, dark coppery brown, or glossy black with golden highlights.",
       eyeColor: "Clear intense dark brown, striking warm amber, or vivid turquoise green.",
       eyeExpression: "Compelling, impactful, and intensely alert with a jewel-like shine.",
     },
-    placeholderPalette: ["#FF4500", "#FFD700", "#00A86B", "#E63946", "#F4A300"],
+    recommendedPalette: [
+      { name: "Poppy/True Red", hex: "#E8352B", estimated: true },
+      { name: "Golden Yellow", hex: "#FDBB2D", estimated: true },
+      { name: "Bright Turquoise", hex: "#00B3B0", estimated: true },
+      { name: "Grass/Kelly Green", hex: "#4CAF3C", estimated: true },
+      { name: "Coral", hex: "#FF6B4A", estimated: true },
+      { name: "Warm Fuchsia", hex: "#E8467F", estimated: true },
+      { name: "Tangerine/Orange-Red", hex: "#F0592B", estimated: true },
+      { name: "Camel", hex: "#C69963", estimated: true },
+      { name: "Warm Ivory", hex: "#FFF2DC", estimated: true },
+      { name: "Bright Navy", hex: "#223A5E", estimated: true },
+    ],
+    styleNote:
+      "No source publishes a palette under this exact name — built from convergent \"True Spring\" guides, pushed toward max chroma to stay distinct from Bright Spring.",
+    needsReview: true,
   },
   {
     slug: "warm-spring",
@@ -92,7 +147,20 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Topaz brown, warm olive-hazel, or golden green.",
       eyeExpression: "Friendly, radiant, and radiating a sunlit heat.",
     },
-    placeholderPalette: ["#C1440E", "#E09F3E", "#9E2A2B", "#FFB703", "#540B0E"],
+    recommendedPalette: [
+      { name: "Cream", hex: "#FFF4D6" },
+      { name: "Golden Yellow", hex: "#F5C542" },
+      { name: "Marigold", hex: "#F4A51C" },
+      { name: "Clear Coral", hex: "#FF6F61" },
+      { name: "Tomato Red", hex: "#E94B35" },
+      { name: "Grass Green", hex: "#54A24B" },
+      { name: "Warm Turquoise", hex: "#28B7A8" },
+      { name: "Warm Teal", hex: "#177E7A" },
+      { name: "Cognac", hex: "#B86B2B" },
+      { name: "Golden Brown", hex: "#8A5A2B" },
+    ],
+    styleNote:
+      "Even \"neutrals\" must read golden, never gray. Gold, brass, or copper metals only.",
   },
   // ---------------- SUMMER ----------------
   {
@@ -108,7 +176,20 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Light icy blue, soft grey, or pale grey-green.",
       eyeExpression: "Dreamy, diffuse, and visually soft; low contrast against the sclera.",
     },
-    placeholderPalette: ["#D8E2F0", "#E6D9E8", "#F4E4E6", "#C9D6DF", "#B8C5D6"],
+    recommendedPalette: [
+      { name: "Powder Blue", hex: "#B0E0E6" },
+      { name: "Soft Rose", hex: "#D8A2A8" },
+      { name: "Lavender", hex: "#E6E6FA" },
+      { name: "Periwinkle", hex: "#CCCCFF" },
+      { name: "Soft Aqua", hex: "#AFDCD3" },
+      { name: "Rose Quartz", hex: "#F7CAC9" },
+      { name: "Pale Cool Lemon", hex: "#F5F0C9", estimated: true },
+      { name: "Sky Blue", hex: "#87CEEB" },
+      { name: "Muted Soft Navy", hex: "#3B4A5A", estimated: true },
+      { name: "Dove Grey", hex: "#C0C0C0" },
+    ],
+    styleNote:
+      "Stay light-to-medium value with moderate saturation and cool undertone throughout. Avoid pure black or stark white near the face; skip orange-based warmth. Silver, platinum, or white gold metals.",
   },
   {
     slug: "bright-summer",
@@ -123,7 +204,21 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Clear sky blue, vibrant grey, or bright cool violet-grey.",
       eyeExpression: "Luminous and clear-sighted, but gentle rather than sharp.",
     },
-    placeholderPalette: ["#4EA5D9", "#A0D2DB", "#C77DFF", "#F4A6C1", "#6C91BF"],
+    recommendedPalette: [
+      { name: "Watermelon Pink", hex: "#E75480" },
+      { name: "Turquoise", hex: "#30D5C8" },
+      { name: "Soft Fuchsia", hex: "#C74375", estimated: true },
+      { name: "Clear Sapphire Blue", hex: "#2E5FA3", estimated: true },
+      { name: "Jade Green", hex: "#00A86B" },
+      { name: "Raspberry Sorbet", hex: "#E4287C", estimated: true },
+      { name: "Bright Periwinkle-Violet", hex: "#8B7FD4", estimated: true },
+      { name: "Icy Pink", hex: "#F4C2C2" },
+      { name: "Crisp White", hex: "#F7F9FA", estimated: true },
+      { name: "Cool Navy", hex: "#1B2A4A", estimated: true },
+    ],
+    styleNote:
+      "Needs to read clear and cool rather than muted or warm — pair one saturated accent with a clean cool neutral rather than two brights together.",
+    needsReview: true,
   },
   {
     slug: "muted-summer",
@@ -134,11 +229,23 @@ export const SEASONS: SeasonProfile[] = [
       "Soft (sf), Dull (d), Light Grayish (ltg), Grayish (g) rings. Medium value, low saturation, cool-neutral hue.",
     blueprint: {
       skin: "Muted pink-beige, dusty rose overtones, or soft grey-toned cool olive.",
-      hair: "Medium to dark ash brown (often described as “mousey” or “dishwater” brown).",
+      hair: "Medium to dark ash brown (\"mousey\"/\"dishwater\" brown).",
       eyeColor: "Muted hazel-grey, soft grey-blue, or cloudy cool brown.",
-      eyeExpression: "Velvety, calm, and shrouded; the iris features blended colors with no distinct borders.",
+      eyeExpression: "Velvety, calm, and shrouded; blended iris colors with no distinct borders.",
     },
-    placeholderPalette: ["#A6A6A8", "#9CAFAA", "#8E9AAF", "#B0A8B9", "#C9BBC8"],
+    recommendedPalette: [
+      { name: "Dusty Rose", hex: "#C9A9A6" },
+      { name: "Antique Rose", hex: "#D4AEB3" },
+      { name: "Muted Sage", hex: "#B8C4BA" },
+      { name: "Slate Blue", hex: "#B5BEC9" },
+      { name: "Soft Plum", hex: "#8F6A76" },
+      { name: "Dusky Violet", hex: "#ACA6B3" },
+      { name: "Washed Denim", hex: "#8FA3BA" },
+      { name: "Soft Navy", hex: "#4A5463" },
+      { name: "Pewter", hex: "#9EA3A6" },
+    ],
+    styleNote:
+      "Keep everything at the same low-saturation, smoky/matte level — tonal, low-contrast combinations read as sophisticated. Matte or brushed silver and rose gold over polished gold.",
   },
   {
     slug: "cool-summer",
@@ -153,7 +260,20 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Cool blue, slate grey, or deep cool charcoal-grey.",
       eyeExpression: "Serene, placid, and coolly poised.",
     },
-    placeholderPalette: ["#5C7AA0", "#3E5C76", "#748CAB", "#1D3557", "#A9BCD0"],
+    recommendedPalette: [
+      { name: "Periwinkle", hex: "#8B87C7" },
+      { name: "Dusty Cornflower Blue", hex: "#6C90C4", estimated: true },
+      { name: "Deep Dusty Rose", hex: "#C48793", estimated: true },
+      { name: "Soft Burgundy", hex: "#7B2D42", estimated: true },
+      { name: "Plum", hex: "#6F4E7C", estimated: true },
+      { name: "Regal Sapphire Blue", hex: "#1F4E8C", estimated: true },
+      { name: "Muted Blue-Green Teal", hex: "#4C8C8B", estimated: true },
+      { name: "Icy Lavender", hex: "#C9C0DE", estimated: true },
+      { name: "Charcoal Grey", hex: "#3B3F42", estimated: true },
+      { name: "Navy", hex: "#1B2A45", estimated: true },
+    ],
+    styleNote:
+      "Carries the widest range of any Summer sub-type, but every color must sit on the true-blue axis with zero yellow/gold undertone. Avoid pure black, optical white, or warm camel.",
   },
   // ---------------- AUTUMN ----------------
   {
@@ -169,7 +289,20 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Soft olive green, warm amber-grey, or light muddy brown.",
       eyeExpression: "Grounded, matte, and diffuse with a quiet, calm depth.",
     },
-    placeholderPalette: ["#A9927D", "#6B705C", "#B08968", "#7F5539", "#DDBEA9"],
+    recommendedPalette: [
+      { name: "Oyster", hex: "#E7D8C3" },
+      { name: "Camel", hex: "#B88957" },
+      { name: "Muted Coral", hex: "#C97963" },
+      { name: "Terracotta Rose", hex: "#B66A58" },
+      { name: "Olive", hex: "#737435" },
+      { name: "Moss", hex: "#6F7B45" },
+      { name: "Warm Teal", hex: "#5C8E72" },
+      { name: "Warm Taupe", hex: "#9A8570" },
+      { name: "Soft Espresso", hex: "#5B4432" },
+      { name: "Bronze", hex: "#9A6A3A" },
+    ],
+    styleNote:
+      "Should look gently dusted with a warm, golden veil — matte, low-contrast, softened. Swap black for soft espresso; avoid optic white, icy pastels, fuchsia, and neons.",
   },
   {
     slug: "strong-autumn",
@@ -184,7 +317,20 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Dark olive green, deep golden hazel, or rich medium warm brown.",
       eyeExpression: "Magnetic, solid, and structurally heavy; highly textured iris.",
     },
-    placeholderPalette: ["#A4462E", "#6F1D1B", "#B08B2D", "#8A5A44", "#C97C5D"],
+    recommendedPalette: [
+      { name: "Pumpkin", hex: "#C86828" },
+      { name: "Rust", hex: "#A84828" },
+      { name: "Mustard Gold", hex: "#B08820" },
+      { name: "Forest Green", hex: "#486838" },
+      { name: "Warm Olive", hex: "#787828" },
+      { name: "Copper", hex: "#B87333" },
+      { name: "Paprika / Brick Red", hex: "#9E4624" },
+      { name: "Deep Teal", hex: "#006D77" },
+      { name: "Sienna", hex: "#A0522D" },
+    ],
+    styleNote:
+      "Rare as a distinct label outside Korean personal-color systems — built from the closest documented analogue, \"True/Rich Autumn.\" Favor medium-to-high saturation jewel tones with real texture; matte gold, aged bronze, or burnished copper over shiny finishes.",
+    needsReview: true,
   },
   {
     slug: "deep-autumn",
@@ -199,7 +345,19 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Dark espresso brown, black-brown, or deep olive-black.",
       eyeExpression: "Penetrating and dense, with an absorbing, opaque gaze.",
     },
-    placeholderPalette: ["#4A2E19", "#6B4226", "#7A3B1E", "#3E2723", "#5B3A29"],
+    recommendedPalette: [
+      { name: "Burnt Sienna", hex: "#924819" },
+      { name: "Deep Burgundy", hex: "#954344" },
+      { name: "Muddy Olive", hex: "#675100" },
+      { name: "Dark Chocolate Brown", hex: "#3D2914" },
+      { name: "Deep Teal", hex: "#008080" },
+      { name: "Deep Plum / Aubergine", hex: "#701C1C" },
+      { name: "Deep Mustard Gold", hex: "#CC7722" },
+      { name: "Forest Green", hex: "#228B22" },
+      { name: "Warm Cream", hex: "#FFEBCD" },
+    ],
+    styleNote:
+      "Favor substantial, deep-and-warm colors over pure black (use dark chocolate brown instead). Warm metals — gold, bronze, copper — and gemstones like amber and garnet.",
   },
   {
     slug: "warm-autumn",
@@ -214,7 +372,19 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "True amber, topaz, rich golden brown, or dark warm green.",
       eyeExpression: "Deeply glowing and intense, evoking a crackling flame.",
     },
-    placeholderPalette: ["#C1440E", "#B5651D", "#DA9A00", "#8B3A2B", "#E08E45"],
+    recommendedPalette: [
+      { name: "Terracotta", hex: "#E2725B" },
+      { name: "Rust", hex: "#B7410E" },
+      { name: "Burnt Orange", hex: "#CC5500" },
+      { name: "Goldenrod", hex: "#DAA520" },
+      { name: "Mustard Yellow", hex: "#FFDB58" },
+      { name: "Olive Green", hex: "#6B8E23" },
+      { name: "Saddle Brown", hex: "#8B4513" },
+      { name: "Amber", hex: "#FFBF00" },
+      { name: "Warm Bronze", hex: "#966E22" },
+    ],
+    styleNote:
+      "Layer different earth tones together for cohesive, sophisticated outfits. Gold, brass, copper, or bronze metals — avoid silver/platinum, which fight the golden undertone.",
   },
   // ---------------- WINTER ----------------
   {
@@ -230,7 +400,20 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Piercing clear blue, vivid emerald green, or striking violet.",
       eyeExpression: "Laser-sharp and crystalline; the iris stands out dramatically against the bright sclera.",
     },
-    placeholderPalette: ["#101820", "#2E294E", "#1B98E0", "#DDEEFF", "#7A28CB"],
+    recommendedPalette: [
+      { name: "Optic White", hex: "#FFFFFF" },
+      { name: "Jet Black", hex: "#000000" },
+      { name: "Deep Navy", hex: "#0A1F44" },
+      { name: "Cobalt Blue", hex: "#0047FF" },
+      { name: "Icy Periwinkle", hex: "#9BB2DB" },
+      { name: "Emerald/Jade Green", hex: "#009B77", estimated: true },
+      { name: "Bright Fuchsia Pink", hex: "#E27EAB" },
+      { name: "Amethyst Purple", hex: "#6E64A3" },
+      { name: "True Red", hex: "#C63836" },
+      { name: "Acid/Lemon Yellow", hex: "#F4E842", estimated: true },
+    ],
+    styleNote:
+      "Apply one very clear accent near the face for maximum impact; avoid muted earth tones, which flatten the natural brilliance. Silk/satin over matte; silver jewelry over gold.",
   },
   {
     slug: "deep-winter",
@@ -245,7 +428,20 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Black-brown, deep obsidian, or dark cool hazel.",
       eyeExpression: "Enigmatic, magnetic, and commanding with a dense gaze.",
     },
-    placeholderPalette: ["#1B1B2F", "#3C1053", "#22223B", "#4A4E69", "#0D1321"],
+    recommendedPalette: [
+      { name: "Deep Charcoal Black", hex: "#1A1A1A" },
+      { name: "Royal Navy", hex: "#102A56" },
+      { name: "Royal Purple", hex: "#4B2E83" },
+      { name: "Burgundy", hex: "#5B1235" },
+      { name: "Emerald", hex: "#0B6E4F" },
+      { name: "Sapphire Blue", hex: "#1F3A93" },
+      { name: "True Red", hex: "#C8102E" },
+      { name: "Fuchsia", hex: "#C2156E" },
+      { name: "Pine Green", hex: "#14533C" },
+      { name: "Optic/Icy White", hex: "#F7F7F4" },
+    ],
+    styleNote:
+      "Pair a deep neutral with one clear, saturated color and let it do the talking — charcoal with true red, navy with icy pink, black with emerald. Silver, white gold, or platinum metals.",
   },
   {
     slug: "vivid-winter",
@@ -253,14 +449,27 @@ export const SEASONS: SeasonProfile[] = [
     family: "Winter",
     keywords: ["Electric", "Neon", "Dramatic", "High-Chroma", "High-Impact"],
     pccsLocation:
-      "Anchored in Vivid (v) and Strong (str) rings. Maximum saturation, medium value, cool-neutral hue.",
+      "Vivid (v) and Strong (str) rings. Maximum saturation, medium value, cool-neutral hue.",
     blueprint: {
       skin: "Highly radiant cool beige, clear porcelain, or bright ebony.",
       hair: "Glossy jet black, dark silver, or pure white-streaked black.",
       eyeColor: "Electric sapphire blue, clear vivid violet, or intense clear dark brown.",
       eyeExpression: "Theatrical and sharp, commanding immediate attention.",
     },
-    placeholderPalette: ["#3A86FF", "#8338EC", "#FF006E", "#06FFA5", "#1B998B"],
+    recommendedPalette: [
+      { name: "Electric Blue", hex: "#1060F0" },
+      { name: "Clear/True Red", hex: "#E02020" },
+      { name: "Hot Pink", hex: "#E01880" },
+      { name: "Vivid Purple", hex: "#8020C0" },
+      { name: "Emerald Green", hex: "#00C957" },
+      { name: "Deep Sky Blue (Sapphire)", hex: "#00BFFF" },
+      { name: "Magenta", hex: "#FF00FF" },
+      { name: "Bright White", hex: "#F8F8F8" },
+      { name: "Midnight Navy", hex: "#191970" },
+      { name: "Icy Mint", hex: "#A0F0E0" },
+    ],
+    styleNote:
+      "Thrives on saturation and contrast; muted or warm-toned alternatives diminish the natural vibrancy. Silver jewelry always; avoid dusty rose, olive, camel, rust.",
   },
   {
     slug: "cool-winter",
@@ -275,7 +484,20 @@ export const SEASONS: SeasonProfile[] = [
       eyeColor: "Deep sapphire blue, clear cool grey, or dark icy brown.",
       eyeExpression: "Chilled, majestic, and formal, free of yellow interference.",
     },
-    placeholderPalette: ["#14213D", "#274690", "#7A9CC6", "#B0C4DE", "#1D2B53"],
+    recommendedPalette: [
+      { name: "Royal Blue", hex: "#002366" },
+      { name: "True/Sapphire Blue", hex: "#0073C2" },
+      { name: "Icy White", hex: "#F0F8FF" },
+      { name: "True Black", hex: "#000000" },
+      { name: "Deep Charcoal/Slate", hex: "#333333" },
+      { name: "Deep Lavender", hex: "#786CBF" },
+      { name: "Emerald Ice", hex: "#009B77" },
+      { name: "Vibrant Fuchsia", hex: "#FF00FF" },
+      { name: "Crimson", hex: "#DC143C" },
+      { name: "Icy Pink", hex: "#FFB7C5" },
+    ],
+    styleNote:
+      "Zero warm or golden warmth in any color; every hue sits on the blue-dominant axis. Silver, platinum, or white gold — avoid gold/bronze entirely.",
   },
 ];
 
