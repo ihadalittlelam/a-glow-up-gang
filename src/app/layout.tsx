@@ -32,7 +32,7 @@ export default function RootLayout({
         </header>
         <main className="flex-1">{children}</main>
         <footer className="border-t border-neutral-200 py-6 text-center text-xs text-neutral-400">
-          Skeleton build — no real photo analysis yet. Placeholder palettes shown.
+          Recommended palettes are real, research-grounded colors — photo-based analysis and AI styling notes are still coming.
         </footer>
       </body>
     </html>
