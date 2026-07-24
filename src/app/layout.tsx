@@ -32,7 +32,7 @@ export default function RootLayout({
         </header>
         <main className="flex-1">{children}</main>
         <footer className="border-t border-neutral-200 py-6 text-center text-xs text-neutral-400">
-          Recommended palettes are real, research-grounded colors — photo-based analysis and AI styling notes are still coming.
+          Recommended palettes are real and research-grounded; personalized notes are AI-written. Photo-based season detection runs in your browser and is an automated estimate — always double-check and adjust it if it doesn&apos;t feel right.
         </footer>
       </body>
     </html>
