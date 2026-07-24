@@ -20,12 +20,31 @@ export interface PaletteColor {
   estimated?: boolean;
 }
 
+// Numeric encoding of the same PCCS ring/hue language already used in
+// `pccsLocation` above, so a photo can be matched against a season by math
+// instead of guesswork. Nothing here is a new claim about the season — each
+// number is a direct translation of ring names Jess's own taxonomy already
+// uses (Pale/Light = high depth, Deep/Dark = low depth, Vivid/Bright/Strong
+// = high clarity, Soft/Dull/Grayish = low clarity, and the explicit
+// warm/cool/warmest/coolest axis language).
+export interface SeasonAxes {
+  /** 0 (deepest/darkest) – 10 (lightest). */
+  depth: number;
+  /** -10 (coolest/bluest) – +10 (warmest/most golden). */
+  warmth: number;
+  /** 0 (most muted/greyed) – 10 (clearest/highest chroma). */
+  clarity: number;
+  /** 0 (low contrast between skin/hair/eyes) – 10 (high contrast). */
+  contrast: number;
+}
+
 export interface SeasonProfile {
   slug: string;
   name: string;
   family: SeasonFamily;
   keywords: string[];
   pccsLocation: string;
+  axes: SeasonAxes;
   blueprint: {
     skin: string;
     hair: string;
@@ -56,6 +75,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Luminous", "Delicate", "Translucent", "Airy", "Fresh"],
     pccsLocation:
       "Pale (p) and Light (lt) rings. High value, low-to-medium saturation, warm hue.",
+    axes: { depth: 9, warmth: 6, clarity: 4, contrast: 3 },
     blueprint: {
       skin: "Translucent ivory, peach-porcelain, or fair beige; highly prone to blushing.",
       hair: "Light golden blonde, strawberry blonde, or flaxen.",
@@ -84,6 +104,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Vibrant", "Sparkling", "Radiant", "Energizing", "Punchy"],
     pccsLocation:
       "Bridges Light (lt) and Bright (b) rings. High value, medium-high chroma, clear warm-neutral hue.",
+    axes: { depth: 7, warmth: 4, clarity: 8, contrast: 6 },
     blueprint: {
       skin: "Clear ivory, luminous golden beige, or bright warm ruddy tones.",
       hair: "Honey brown, bright golden brown, or copper-blonde.",
@@ -112,6 +133,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Striking", "High-Chroma", "Electric", "Playful", "High-Contrast"],
     pccsLocation:
       "Vivid (v) and Strong (str) rings. Maximum saturation, medium value, warm-neutral hue.",
+    axes: { depth: 5, warmth: 5, clarity: 10, contrast: 8 },
     blueprint: {
       skin: "Radiant golden-beige, clear bronze, or glowing dark warm skin with high clarity.",
       hair: "Medium to deep golden chestnut, dark coppery brown, or glossy black with golden highlights.",
@@ -141,6 +163,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Honeyed", "Sunny", "Golden", "Richly-Warm", "Cozy"],
     pccsLocation:
       "Spans Bright (b), Vivid (v), Strong (str) rings; defined by the absolute Warmest Axis (yellow-dominant).",
+    axes: { depth: 5, warmth: 9, clarity: 7, contrast: 6 },
     blueprint: {
       skin: "Noticeably golden, warm peach, or copper-tan with distinct warm undertones.",
       hair: "True red, ginger, rich copper, or golden auburn.",
@@ -170,6 +193,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Ethereal", "Pastel", "Delicate", "Watercolor", "Misty"],
     pccsLocation:
       "Pale (p) and Light (lt) rings. High value, low-to-medium saturation, cool hue.",
+    axes: { depth: 9, warmth: -6, clarity: 4, contrast: 2 },
     blueprint: {
       skin: "Cool porcelain, pale pinkish-beige, or delicate rosy alabaster.",
       hair: "Ash blonde, ultra-light ash brown, or platinum flaxen.",
@@ -198,6 +222,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Refreshing", "Breezy", "Fluid", "Clear-Cool", "Crisp"],
     pccsLocation:
       "Light (lt) and Bright (b) rings. High-to-medium value, medium-high clarity, cool-neutral hue.",
+    axes: { depth: 6, warmth: -4, clarity: 8, contrast: 6 },
     blueprint: {
       skin: "Clear cool pink, bright rose-beige, or clear light cool-olive.",
       hair: "Medium ash blonde or light-to-medium ash brown with a soft natural sheen.",
@@ -227,6 +252,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Elegant", "Smoky", "Matte", "Sophisticated", "Slate"],
     pccsLocation:
       "Soft (sf), Dull (d), Light Grayish (ltg), Grayish (g) rings. Medium value, low saturation, cool-neutral hue.",
+    axes: { depth: 5, warmth: -3, clarity: 2, contrast: 2 },
     blueprint: {
       skin: "Muted pink-beige, dusty rose overtones, or soft grey-toned cool olive.",
       hair: "Medium to dark ash brown (\"mousey\"/\"dishwater\" brown).",
@@ -254,6 +280,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Serene", "Aristocratic", "Icy-Soft", "Blue-Heavy", "Regal"],
     pccsLocation:
       "Sweeps Light (lt), Bright (b), Soft (sf), Dull (d) rings; defined by the absolute Coolest Axis (blue-dominant).",
+    axes: { depth: 5, warmth: -9, clarity: 5, contrast: 4 },
     blueprint: {
       skin: "Deep cool porcelain or pink-beige with prominent blue undertones.",
       hair: "Medium to dark ash brown with no traces of red or gold.",
@@ -283,6 +310,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Earthy", "Understated", "Chic", "Khaki", "Sage"],
     pccsLocation:
       "Soft (sf), Dull (d), Light Grayish (ltg), Grayish (g) rings. Medium value, low saturation, warm-neutral hue.",
+    axes: { depth: 6, warmth: 3, clarity: 2, contrast: 2 },
     blueprint: {
       skin: "Soft warm beige, light ivory-olive, or low-contrast warm complexions.",
       hair: "Muted golden brown, dark honey blonde, or soft faded auburn.",
@@ -311,6 +339,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Rich", "Textured", "Splendid", "Abundant", "Dynamic"],
     pccsLocation:
       "Strong (str) and Deep (dp) rings. Medium-low value, medium-high saturation, warm hue.",
+    axes: { depth: 3, warmth: 6, clarity: 7, contrast: 5 },
     blueprint: {
       skin: "Rich golden beige, amber, or warm deep bronze.",
       hair: "Deep chestnut brown, rich auburn, or dark brown shot with copper.",
@@ -339,6 +368,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Mysterious", "Majestic", "Espresso", "Heavy", "Brooding"],
     pccsLocation:
       "Deep (dp), Dark (dk), Dark Grayish (dkg) rings. Low value, medium saturation, warm-neutral hue.",
+    axes: { depth: 2, warmth: 3, clarity: 4, contrast: 4 },
     blueprint: {
       skin: "Deep golden brown, rich bronze, dark olive, or warm terracotta black.",
       hair: "Dark chocolate brown, espresso black, or deep warm black.",
@@ -366,6 +396,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Terracotta", "Harvest", "Spicy", "Deep-Gold", "Radiant"],
     pccsLocation:
       "Spans Strong (str), Deep (dp), Dark (dk), Dull (d) rings; anchored to the absolute Warmest Axis (orange-dominant).",
+    axes: { depth: 3, warmth: 9, clarity: 5, contrast: 5 },
     blueprint: {
       skin: "Heavy golden-amber skin, glowing copper tones, or rich warm gold undertones.",
       hair: "Vibrant copper, rich auburn, fiery dark red, or golden chestnut.",
@@ -394,6 +425,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Crystalline", "Stark", "Glacial", "High-Contrast", "Crisp"],
     pccsLocation:
       "Pale (p), Light (lt), Bright (b) rings paired in high-contrast with Dark (dk)/pure black. High clarity, cool-neutral hue.",
+    axes: { depth: 6, warmth: -4, clarity: 9, contrast: 10 },
     blueprint: {
       skin: "Translucent cool white, clear alabaster, or highly luminous dark cool skin.",
       hair: "Stark jet black, dark ash brown, or icy platinum-white.",
@@ -422,6 +454,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Charcoal", "Intense", "Royal", "Regal", "Enigmatic"],
     pccsLocation:
       "Deep (dp), Dark (dk), Dark Grayish (dkg) rings. Low value, medium saturation, cool-neutral hue.",
+    axes: { depth: 2, warmth: -3, clarity: 4, contrast: 5 },
     blueprint: {
       skin: "Cool espresso, deep cool olive, or stark chalk-white with an icy undertone.",
       hair: "Inky black, charcoal brown, or deep silver-black.",
@@ -450,6 +483,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Electric", "Neon", "Dramatic", "High-Chroma", "High-Impact"],
     pccsLocation:
       "Vivid (v) and Strong (str) rings. Maximum saturation, medium value, cool-neutral hue.",
+    axes: { depth: 5, warmth: -4, clarity: 10, contrast: 8 },
     blueprint: {
       skin: "Highly radiant cool beige, clear porcelain, or bright ebony.",
       hair: "Glossy jet black, dark silver, or pure white-streaked black.",
@@ -478,6 +512,7 @@ export const SEASONS: SeasonProfile[] = [
     keywords: ["Sapphire", "Slate", "True-Blue", "Pure-Cool", "Regal-Chill"],
     pccsLocation:
       "Spans Vivid (v), Strong (str), Deep (dp), Dark (dk) rings; aligned to the absolute Coolest Axis (blue-dominant).",
+    axes: { depth: 3, warmth: -9, clarity: 6, contrast: 5 },
     blueprint: {
       skin: "Classic blue-based undertones, cool pinkish-white, or cool slate-brown.",
       hair: "Ashy blue-black, charcoal, or uniform deep silver (no warmth).",
